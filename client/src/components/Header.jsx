@@ -20,7 +20,7 @@ export default function Header() {
           />
           <FaSearch />
         </form>
-        <ul className="flex gap-8">
+        <ul className="flex gap-4">
           <Link to="/">
             <li className="hidden sm:inline text-stoneBold hover:underline">
               Home

@@ -4,3 +4,7 @@
 @import "tailwindcss/utilities";
 
 /* Your custom styles here */
+
+body {
+  background-color: rgb(241, 245, 241);
+}
