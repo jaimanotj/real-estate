@@ -17,7 +17,7 @@ const userSchema = new mongoose.Schema(
       required: true,
     },
   },
-  { timestamps: true }
+  { timestamps: true } //to have created at & updated at time details of the user
 );
 
 const User = mongoose.model("User", userSchema);
