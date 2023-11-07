@@ -16,6 +16,11 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    avatar: {
+      type: String,
+      default:
+        "https://img.freepik.com/premium-vector/avatar-icon002_750950-52.jpg",
+    },
   },
   { timestamps: true } //to have created at & updated at time details of the user
 );

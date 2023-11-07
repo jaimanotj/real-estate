@@ -6,6 +6,7 @@ import {
   signInSuccess,
   signInFailure,
 } from "../redux/user/userSlice";
+import OAuth from "../components/OAuth";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
@@ -67,11 +68,12 @@ export default function SignIn() {
         >
           Sign In
         </button>
+        <OAuth />
       </form>
       <div className="flex gap-2 mt-3">
         <p>Dont have an account ?</p>
         <Link to={"/sign-up"}>
-          <span className="text-rose hover:underline">SignUp</span>
+          <span className="text-blue hover:underline">SignUp</span>
         </Link>
       </div>
       {error && <p className="text-rose mt-5">{error}</p>}
