@@ -11,6 +11,7 @@ export default {
       lightBlue: "#60a5fa",
       rose: "#e11d48",
       green: "#84cc16",
+      white: "#FFFFFF",
     },
     extend: {},
   },

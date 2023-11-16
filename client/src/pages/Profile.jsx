@@ -18,6 +18,7 @@ import {
   signOutUserFailure,
 } from "../redux/user/userSlice";
 import { app } from "../firebase";
+import { Link } from "react-router-dom";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -175,8 +176,15 @@ export default function Profile() {
           className="bg-slate text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
         >
           {loading ? "Loading..." : "Update"}
-        </button>
+        </button>{" "}
+        <Link
+          className="bg-green p-3 rounded-lg hover-opacity-95 text-center"
+          to={"/create-listing"}
+        >
+          CREATE LISTING
+        </Link>
       </form>
+
       <div className="flex justify-between mt-5">
         <span onClick={handleUserDelete} className="text-rose cursor-pointer">
           Delete account
