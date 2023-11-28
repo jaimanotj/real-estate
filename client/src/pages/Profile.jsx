@@ -19,6 +19,7 @@ import {
 } from "../redux/user/userSlice";
 import { app } from "../firebase";
 import { Link } from "react-router-dom";
+import { FaPen, FaTrash } from "react-icons/fa";
 
 export default function Profile() {
   const { currentUser, loading, error } = useSelector((state) => state.user);
@@ -29,6 +30,8 @@ export default function Profile() {
   const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
   const [updateSuccess, setUpdateSuccess] = useState(false);
+  const [userListings, setUserListing] = useState({});
+  const [showListingError, setShowListingError] = useState(false);
 
   useEffect(() => {
     if (image) {
@@ -118,6 +121,38 @@ export default function Profile() {
       dispatch(deleteUserFailure(data.message));
     }
   };
+
+  const handleShowListing = async () => {
+    try {
+      const res = await fetch(`/api/listing/listings/${currentUser._id}`);
+      const data = await res.json();
+      if (data.success === false) {
+        setShowListingError(true);
+        return;
+      }
+      setUserListing(data);
+    } catch (error) {
+      setShowListingError(true);
+    }
+  };
+
+  const handleDeleteListing = async (listingId) => {
+    try {
+      const res = await fetch(`/api/listing/delete/${listingId}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setUserListing((prev) =>
+        prev.filter((listing) => listing._id !== listingId)
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
   return (
     <div className="p-3 max-w-lg mx-auto">
       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
@@ -197,6 +232,57 @@ export default function Profile() {
       <p className="text-green mt-5">
         {updateSuccess ? "User updated successfully!" : ""}
       </p>
+      <button onClick={handleShowListing} className="text-green w-full">
+        Show Listings
+      </button>
+      <p className="text-rose mt-5">
+        {showListingError ? "Error showing listings" : ""}
+      </p>
+      {userListings && userListings.length > 0 && (
+        <div className="flex flex-col gap-4">
+          <h1 className="text-center mt-7 text-2xl font-semibold">
+            Your Listings
+          </h1>
+          {userListings.map((listing) => (
+            <div
+              key={listing._id}
+              className="border rounded-lg p-3 flex justify-between items-center gap-4"
+            >
+              <Link to={`/listing/${listing._id}`}>
+                <img
+                  src={listing.imageUrls[0]}
+                  alt="listing cover"
+                  className="h-16 w-16 object-contain"
+                />
+              </Link>
+              <Link
+                className="text-slate font-semibold  hover:underline truncate flex-1"
+                to={`/listing/${listing._id}`}
+              >
+                <p>{listing.name}</p>
+              </Link>
+
+              <div className="flex flex-col item-center">
+                <div className="p-3">
+                  <FaTrash
+                    type="button"
+                    className="fill-rose rounded-md hover:opacity-75"
+                    onClick={() => handleDeleteListing(listing._id)}
+                  />
+                </div>
+                <Link to={`/update-listing/${listing._id}`}>
+                  <div className="p-3">
+                    <FaPen
+                      type="button"
+                      className="fill-green rounded-sm hover:opacity-75"
+                    />
+                  </div>
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
