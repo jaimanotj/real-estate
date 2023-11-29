@@ -4,12 +4,13 @@ import {
   ref,
   uploadBytesResumable,
 } from "firebase/storage";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { app } from "../firebase";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate, useParams } from "react-router-dom";
 
-export default function CreateListing() {
+export default function UpdateListing() {
   const [files, setFiles] = useState([]);
   const [uploading, setUploading] = useState(false);
   const [imageUploadError, setImageUploadError] = useState(false);
@@ -30,6 +31,22 @@ export default function CreateListing() {
     parking: false,
     furnished: false,
   });
+  const params = useParams();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchListing = async () => {
+      const listingId = params.listingId;
+      const res = await fetch(`/api/listing/getList/${listingId}`);
+      const data = await res.json();
+      if (data.success === false) {
+        console.log(data.message);
+        return;
+      }
+      setFormData(data);
+    };
+    fetchListing();
+  }, []);
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -130,7 +147,7 @@ export default function CreateListing() {
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
-      const res = await fetch("/api/listing/create", {
+      const res = await fetch(`/api/listing/update/${params.listingId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -145,14 +162,12 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
-      // navigate(`/listing/${data._id}`);
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
     }
   };
-
-  console.log(formData);
 
   return (
     <main className="p-3 max-w-4xl mx-auto">
@@ -352,7 +367,7 @@ export default function CreateListing() {
               </div>
             ))}
           <button className="p-3 bg-slate text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
-            {loading ? "Creating..." : "Create Listing"}
+            {loading ? "Updating..." : "Update"}
           </button>
           {error && <p className="text-rose text-sm">{error}</p>}
         </div>
