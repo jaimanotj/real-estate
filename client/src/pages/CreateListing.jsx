@@ -8,6 +8,7 @@ import React, { useState } from "react";
 import { app } from "../firebase";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function CreateListing() {
   const [files, setFiles] = useState([]);
@@ -30,6 +31,7 @@ export default function CreateListing() {
     parking: false,
     furnished: false,
   });
+  const navigate = useNavigate();
 
   const handleImageSubmit = (e) => {
     if (files.length > 0 && files.length + formData.imageUrls.length < 7) {
@@ -145,7 +147,7 @@ export default function CreateListing() {
       if (data.success === false) {
         setError(data.message);
       }
-      // navigate(`/listing/${data._id}`);
+      navigate(`/listing/${data._id}`);
     } catch (error) {
       setError(error.message);
       setLoading(false);
