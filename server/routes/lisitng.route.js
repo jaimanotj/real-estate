@@ -1,5 +1,8 @@
 import express from "express";
-import { createListing } from "../controllers/listing.controller.js";
+import {
+  createListing,
+  getListings,
+} from "../controllers/listing.controller.js";
 import { verifyToken } from "../utils/verifyUser.js";
 import {
   getUserListing,
@@ -15,5 +18,6 @@ listingRouter.get("/getList/:id", getListing); //Used for fetching list for glob
 listingRouter.post("/create", verifyToken, createListing);
 listingRouter.delete("/delete/:id", verifyToken, deleteListing);
 listingRouter.post("/update/:id", verifyToken, updateListing);
+listingRouter.get("/get", getListings); //get listings for search functionality
 
 export default listingRouter;
