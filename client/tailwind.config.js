@@ -16,6 +16,8 @@ export default {
       slate300: "#CCCCCC",
       black: "#000000",
       slate800: "#333333",
+      slate700: "#334155",
+      gray600: "#4b5563",
     },
     extend: {},
   },
