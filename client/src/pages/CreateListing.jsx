@@ -128,7 +128,7 @@ export default function CreateListing() {
     try {
       if (formData.imageUrls.length < 1)
         return setError("You must upload at least one image");
-      if (+formData.regularPrice < +formData.discountedPrice)
+      if (+formData.price < +formData.discountedPrice)
         return setError("Discount price must be lower than regular price");
       setLoading(true);
       setError(false);
@@ -276,7 +276,7 @@ export default function CreateListing() {
                 type="number"
                 id="price"
                 min="20"
-                max="50000"
+                max="500000000"
                 required
                 className="border-bgColorLight p-3 rounded-lg focus:outline-none"
                 onChange={handleChange}
@@ -291,8 +291,8 @@ export default function CreateListing() {
               <input
                 type="number"
                 id="discountedPrice"
-                min="10"
-                max="40000"
+                min="0"
+                max="400000000"
                 required
                 className="border-bgColorLight p-3 rounded-lg focus:outline-none"
                 onChange={handleChange}
@@ -353,7 +353,10 @@ export default function CreateListing() {
                 </div>
               </div>
             ))}
-          <button className="p-3 bg-slate text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80">
+          <button
+            disabled={loading || uploading}
+            className="p-3 bg-slate text-white rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          >
             {loading ? "Creating..." : "Create Listing"}
           </button>
           {error && <p className="text-rose text-sm">{error}</p>}
